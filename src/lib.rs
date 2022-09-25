@@ -60,6 +60,17 @@ pub struct Comment {
 }
 
 #[derive(Debug)]
+pub enum Color {
+    Red,
+    Green,
+    Yellow,
+    Blue,
+    Magenta,
+    Cyan,
+    White,
+}
+
+#[derive(Debug)]
 pub struct Record {
     pub qtd: u16,
 }
@@ -251,17 +262,6 @@ pub fn list_comments(task_title: &str, task_id: u16) -> Result<()> {
     println!("{:?}", selected_comment);
 
     Ok(())
-}
-
-#[derive(Debug)]
-pub enum Color {
-    Red,
-    Green,
-    Yellow,
-    Blue,
-    Magenta,
-    Cyan,
-    White,
 }
 
 pub fn other() -> Result<()> {
