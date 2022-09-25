@@ -1,9 +1,10 @@
 use rusqlite::Result;
-use sample::*;
+use task_manager::*;
 pub mod dao;
 pub mod user_input;
 
 fn main() -> Result<()> {
+    display_app_intro();
     dao::create_database()?;
     dao::list_delayed_tasks();
 

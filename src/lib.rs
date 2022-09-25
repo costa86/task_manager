@@ -1,7 +1,7 @@
 use crate::user_input::{get_user_confirmation, get_user_selection};
 use chrono::{TimeZone, Utc};
 use colored::*;
-// use home::home_dir;
+use home::home_dir;
 use rusqlite::{Connection, Result};
 use tabled::Tabled;
 
@@ -70,7 +70,11 @@ pub fn get_connection() -> Connection {
 }
 
 pub fn get_database_path() -> String {
-    format!("{}.db3", env!("CARGO_PKG_NAME"))
+    format!(
+        "{}/{}.db3",
+        home_dir().unwrap().display(),
+        env!("CARGO_PKG_NAME")
+    )
 }
 
 ///title, id
@@ -302,4 +306,18 @@ pub fn get_tasks(query: &str) -> Result<Vec<Task>> {
     }
 
     Ok(records)
+}
+
+pub fn display_app_intro() {
+    let title = format!(
+        "\n{} - {} \nAuthors: {}\nVersion: {}\nLicense: {}\nCrafted with ❤️ using Rust language\nDatabase: {}\n",
+        env!("CARGO_PKG_NAME").to_uppercase(),
+        env!("CARGO_PKG_DESCRIPTION"),
+        env!("CARGO_PKG_AUTHORS"),
+        env!("CARGO_PKG_VERSION"),
+        env!("CARGO_PKG_LICENSE"),
+        get_database_path()
+    );
+
+    println!("{title}");
 }

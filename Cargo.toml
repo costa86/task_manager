@@ -1,7 +1,13 @@
 [package]
-name = "sample"
 version = "0.1.0"
 edition = "2021"
+name = "task-manager"
+authors = ["Lorenzo Costa <http://www.costa86.tech>"]
+description = "A fully-fladged CLI task managager"
+license = "AGPL-3.0-or-later"
+keywords = ["cli", "task", "management", "productivity"]
+repository = "https://github.com/costa86/task-manager"
+documentation = "https://docs.rs/task-manager/"
 
 [dependencies]
 chrono = "0.4"

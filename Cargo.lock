@@ -386,18 +386,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sample"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "colored",
- "dialoguer",
- "home",
- "rusqlite",
- "tabled",
-]
-
-[[package]]
 name = "smallvec"
 version = "1.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -436,6 +424,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "task-manager"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "colored",
+ "dialoguer",
+ "home",
+ "rusqlite",
+ "tabled",
 ]
 
 [[package]]

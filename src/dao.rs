@@ -150,11 +150,6 @@ pub fn list_delayed_tasks() {
     let tasks_raw = get_tasks(&query).unwrap();
 
     if tasks_raw.len() == 0 {
-        display_message(
-            "info",
-            "No Tasks found in database with these criteria",
-            Color::Cyan,
-        );
         return;
     }
 
