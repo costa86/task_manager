@@ -1,7 +1,7 @@
+// use home::home_dir;
 use crate::user_input::{get_user_confirmation, get_user_selection};
 use chrono::{TimeZone, Utc};
 use colored::*;
-use home::home_dir;
 use rusqlite::{Connection, Result};
 use tabled::Tabled;
 
@@ -10,20 +10,28 @@ pub mod user_input;
 pub const TABLE_TASKS: &str = "tasks";
 pub const TABLE_BOARDS: &str = "boards";
 pub const TABLE_COMMENTS: &str = "comments";
+pub const DELETE: &str = "Delete";
+pub const CHANGE: &str = "Change";
+pub const ADD_COMMENT: &str = "Add comment";
+pub const CREATE_TASK: &str = "Create Task";
+pub const VIEW_PENDING_TASKS: &str = "View Tasks [Pending]";
+pub const VIEW_DONE_TASKS: &str = "View Tasks [Done]";
+pub const CREATE_BOARD: &str = "Create Board";
+pub const VIEW_BOARDS: &str = "View Boards";
+pub const EXIT: &str = "Exit";
 
-pub const MAIN_MENU_OPTIONS: [&str; 7] = [
-    "Create Task",
-    "View Tasks [Pending]",
-    "View Tasks [Done]",
-    "Create Board",
-    "View Boards",
-    "other",
-    "Exit",
+pub const MAIN_MENU_OPTIONS: [&str; 6] = [
+    CREATE_TASK,
+    VIEW_PENDING_TASKS,
+    VIEW_DONE_TASKS,
+    CREATE_BOARD,
+    VIEW_BOARDS,
+    EXIT,
 ];
 
 const TASK_ACTIONS: [&str; 6] = [
-    "Delete",
-    "Change",
+    DELETE,
+    CHANGE,
     "Add comment",
     "View comments",
     "Set reminder",
@@ -80,12 +88,16 @@ pub fn get_connection() -> Connection {
     conn
 }
 
+// pub fn get_database_path() -> String {
+//     format!(
+//         "{}/{}.db3",
+//         home_dir().unwrap().display(),
+//         env!("CARGO_PKG_NAME")
+//     )
+// }
+
 pub fn get_database_path() -> String {
-    format!(
-        "{}/{}.db3",
-        home_dir().unwrap().display(),
-        env!("CARGO_PKG_NAME")
-    )
+    format!("{}.db3", env!("CARGO_PKG_NAME"))
 }
 
 ///title, id
@@ -178,6 +190,7 @@ fn delete_board(board_title: &str, board_id: u16) -> Result<()> {
         get_user_confirmation(format!("Are you sure you want to delete {}", &board_title).as_str());
 
     if deletion_confirmation {
+        dao::delete_tasks_by_board_id(&board_id).unwrap();
         let deletion_successful = dao::delete_record_by_id(TABLE_BOARDS, board_id);
         match deletion_successful {
             Ok(_) => display_message(
@@ -209,6 +222,7 @@ fn delete_task(task_title: &str, task_id: u16) -> Result<()> {
         get_user_confirmation(format!("Are you sure you want to delete {}", &task_title).as_str());
 
     if deletion_confirmation {
+        dao::delete_comments_by_task_id(&task_id).unwrap();
         let deletion_successful = dao::delete_record_by_id(TABLE_TASKS, task_id);
         match deletion_successful {
             Ok(_) => display_message(
@@ -261,10 +275,6 @@ pub fn list_comments(task_title: &str, task_id: u16) -> Result<()> {
     let selected_comment = select_comment(&comments, &task_title).unwrap();
     println!("{:?}", selected_comment);
 
-    Ok(())
-}
-
-pub fn other() -> Result<()> {
     Ok(())
 }
 

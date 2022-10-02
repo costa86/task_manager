@@ -50,6 +50,21 @@ where
     (items.get(selection).unwrap().to_string(), selection)
 }
 
+//Get singe response from choices
+pub fn get_user_selection_text<T>(items: &Vec<T>, title: &str) -> String
+where
+    T: Display,
+{
+    let selection = Select::with_theme(&ColorfulTheme::default())
+        .items(&items)
+        .with_prompt(title)
+        .default(0)
+        .interact()
+        .unwrap();
+
+    items[selection].to_string()
+}
+
 //Get date response
 pub fn get_user_date(midnight: bool, must_be_future: bool) -> Option<String> {
     let now = Utc::now();

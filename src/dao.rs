@@ -177,6 +177,24 @@ pub fn delete_record_by_id(table: &str, id: u16) -> Result<()> {
     Ok(())
 }
 
+pub fn delete_tasks_by_board_id(board_id: &u16) -> Result<()> {
+    let conn = get_connection();
+    conn.execute(
+        &format!("DELETE FROM {TABLE_TASKS} WHERE board_id = ?1"),
+        params![board_id],
+    )?;
+    Ok(())
+}
+
+pub fn delete_comments_by_task_id(task_id: &u16) -> Result<()> {
+    let conn = get_connection();
+    conn.execute(
+        &format!("DELETE FROM {TABLE_COMMENTS} WHERE task_id = ?1"),
+        params![task_id],
+    )?;
+    Ok(())
+}
+
 pub fn get_boards() -> Result<Vec<Board>> {
     let conn = get_connection();
     let query = format!("SELECT * FROM {TABLE_BOARDS}");
@@ -240,7 +258,13 @@ pub fn create_task() -> Result<()> {
     let with_reminder = get_user_confirmation("Set reminder");
 
     let reminder = match with_reminder {
-        true => get_user_date(true, true).unwrap(),
+        true => {
+            let user_date = get_user_date(true, true);
+            if user_date.is_none() {
+                return Ok(());
+            }
+            user_date.unwrap()
+        }
         false => "".to_string(),
     };
 

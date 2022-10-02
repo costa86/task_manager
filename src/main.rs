@@ -9,14 +9,14 @@ fn main() -> Result<()> {
     dao::list_delayed_tasks();
 
     loop {
-        let (_, index) = user_input::get_user_selection(&MAIN_MENU_OPTIONS.to_vec(), "Option");
-        match index {
-            0 => dao::create_task()?,
-            1 => list_tasks(0)?,
-            2 => list_tasks(1)?,
-            3 => dao::create_board()?,
-            4 => list_boards()?,
-            5 => other()?,
+        let action = user_input::get_user_selection_text(&MAIN_MENU_OPTIONS.to_vec(), "Option");
+
+        match action.as_str() {
+            CREATE_TASK => dao::create_task()?,
+            VIEW_PENDING_TASKS => list_tasks(0)?,
+            VIEW_DONE_TASKS => list_tasks(1)?,
+            CREATE_BOARD => dao::create_board()?,
+            VIEW_BOARDS => list_boards()?,
             _ => break,
         };
     }
